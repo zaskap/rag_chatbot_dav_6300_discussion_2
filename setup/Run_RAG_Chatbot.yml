@@ -156,12 +156,12 @@ Resources:
         FromPort: 22
         ToPort: 22
         IpRanges:
-            - 0.0.0.0/0
+          - 0.0.0.0/0
       - IpProtocol: tcp
         FromPort: 8501
         ToPort: 8501
         IpRanges:
-            - 0.0.0.0/0
+          - 0.0.0.0/0
       SecurityGroupEgress:
       - CidrIp: 0.0.0.0/0
         IpProtocol: "-1" # Allow all outbound traffic

@@ -1,0 +1,176 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation template to create VPC, subnets, internet gateway, route tables, S3 endpoint, security groups, RDS subnet group, and S3 buckets as described."
+
+Resources:
+  # VPC
+  dav6300Discussion2VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "90.90.0.0/16"
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-VPC"
+
+  # Public Subnet 1A
+  dav6300Discussion2PublicSubnet1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.10.0/24"
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-subnet-1A"
+
+  # Private Subnet 1A
+  dav6300Discussion2PrivateSubnet1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.11.0/24"
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-subnet-1A"
+
+  # Public Subnet 1B
+  dav6300Discussion2PublicSubnet1B:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.20.0/24"
+      AvailabilityZone: "us-east-1b"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-subnet-1B"
+
+  # Private Subnet 1B
+  dav6300Discussion2PrivateSubnet1B:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.21.0/24"
+      AvailabilityZone: "us-east-1b"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-subnet-1B"
+
+  # Internet Gateway
+  dav6300Discussion2IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-IGW"
+
+  # Attach Internet Gateway to VPC
+  AttachIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      InternetGatewayId: !Ref dav6300Discussion2IGW
+
+  # Public Route Table
+  dav6300Discussion2PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-RT"
+
+  # Public Route
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachIGW
+    Properties:
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref dav6300Discussion2IGW
+
+  # Associate Public Subnet 1A with Public Route Table
+  AssociatePublicSubnet1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PublicSubnet1A
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+
+  # Associate Public Subnet 1B with Public Route Table
+  AssociatePublicSubnet1B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PublicSubnet1B
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+
+  # Private Route Table
+  dav6300Discussion2PrivateRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-RT"
+
+  # Associate Private Subnet 1A with Private Route Table
+  AssociatePrivateSubnet1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PrivateSubnet1A
+      RouteTableId: !Ref dav6300Discussion2PrivateRT
+
+  # Associate Private Subnet 1B with Private Route Table
+  AssociatePrivateSubnet1B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PrivateSubnet1B
+      RouteTableId: !Ref dav6300Discussion2PrivateRT
+
+
+Outputs:
+  VPCId:
+    Description: "The ID of the VPC"
+    Value: !Ref dav6300Discussion2VPC
+    Export:
+      Name: Dav6300Discussion2-VPC-Id
+  PublicSubnet1AId:
+    Description: "The ID of the Public Subnet in us-east-1a"
+    Value: !Ref dav6300Discussion2PublicSubnet1A
+    Export:
+      Name: Dav6300Discussion2-PublicSubnet1A-Id
+  PrivateSubnet1AId:
+    Description: "The ID of the Private Subnet in us-east-1a"
+    Value: !Ref dav6300Discussion2PrivateSubnet1A
+    Export:
+      Name: Dav6300Discussion2-PrivateSubnet1A-Id
+  PublicSubnet1BId:
+    Description: "The ID of the Public Subnet in us-east-1b"
+    Value: !Ref dav6300Discussion2PublicSubnet1B
+    Export:
+      Name: Dav6300Discussion2-PublicSubnet1B-Id
+  PrivateSubnet1BId:
+    Description: "The ID of the Private Subnet in us-east-1b"
+    Value: !Ref dav6300Discussion2PrivateSubnet1B
+    Export:
+      Name: Dav6300Discussion2-PrivateSubnet1B-Id
+  InternetGatewayId:
+    Description: "The ID of the Internet Gateway"
+    Value: !Ref dav6300Discussion2IGW
+    Export:
+      Name: Dav6300Discussion2-IGW-Id
+  PublicRouteTableId:
+    Description: "The ID of the Public Route Table"
+    Value: !Ref dav6300Discussion2PublicRT
+    Export:
+      Name: Dav6300Discussion2-PublicRT-Id
+  PrivateRouteTableId:
+    Description: "The ID of the Private Route Table"
+    Value: !Ref dav6300Discussion2PrivateRT
+    Export:
+      Name: Dav6300Discussion2-PrivateRT-Id
