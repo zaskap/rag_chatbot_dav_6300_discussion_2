@@ -182,8 +182,8 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          IpRanges:
-            - 0.0.0.0/0  # Allow SSH access from anywhere (for testing purposes, restrict in production)
+          CidrIp: 0.0.0.0/0  # Allow SSH access from anywhere (for testing purposes, restrict in production)
+          
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: "-1"  # Allow all outbound traffic
@@ -257,7 +257,10 @@ Resources:
             
             sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
 
-            sudo -u ec2-user -i ./start_program.sh
+            sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
+            sudo -u ec2-user -i chmod +x start_program.sh
+            sudo -u ec2-user -i ./start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
 
   # EC2 Instance for Streamlit Application with User Data (in Public Subnet 1B)
   StreamlitAppServer1B:
@@ -311,7 +314,10 @@ Resources:
             
             sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
 
-            sudo -u ec2-user -i ./start_program.sh
+            sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
+            sudo -u ec2-user -i chmod +x start_program.sh
+            sudo -u ec2-user -i ./start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
 
   # IAM Role for Streamlit Application          
   StreamlitAppServerRole: 

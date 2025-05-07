@@ -159,7 +159,7 @@ def second_column():
 
 # display function for the second column of the app homepage and info page
 # this function is called from the main.py file
-def thrid_column():
+def third_column():
             st.write(" ")
             st.write(" ")
             st.markdown("""<span style='color:#5A5A5A;'>The Reference for this project are as follows <br>
@@ -173,6 +173,8 @@ def thrid_column():
             st.write(" ")
             st.write(" ")
             st.markdown("""<span style='color:#5A5A5A;'> The Code for this project can be found here - <a href="https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2"> Project Github Repo </a></span>""",unsafe_allow_html=True)
+            st.write(" ")
+            st.write(" ")
             
 
 # display function for the header display
