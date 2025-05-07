@@ -55,7 +55,7 @@ st.markdown(
     </style>
     """, unsafe_allow_html=True
 )
-sidebar_title = '<p style="font-family:Amazon Ember; color:#FF9900; font-size: 30px; "><b>Amazon Bedrock Powered - Q&A ChatBot</b></p>'
+sidebar_title = '<p style="font-family:Amazon Ember; color:#FF9900; font-size: 30px; "><b>Amazon Bedrock Powered - RAG ChatBot</b><br> Created for DAV 6300 Dicussion 2</p>'
 st.sidebar.markdown(sidebar_title, unsafe_allow_html=True)
 
 #

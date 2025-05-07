@@ -257,6 +257,8 @@ Resources:
             
             sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
 
+            sudo -u ec2-user -i ./start_program.sh
+
   # EC2 Instance for Streamlit Application with User Data (in Public Subnet 1B)
   StreamlitAppServer1B:
     Type: AWS::EC2::Instance
@@ -308,6 +310,8 @@ Resources:
             sudo -u ec2-user -i pip install -r /home/ec2-user/rag_chatbot_dav_6300_discussion_2/requirements.txt --no-cache-dir
             
             sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
+
+            sudo -u ec2-user -i ./start_program.sh
 
   # IAM Role for Streamlit Application          
   StreamlitAppServerRole: 
