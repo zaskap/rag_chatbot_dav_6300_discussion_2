@@ -259,7 +259,7 @@ Resources:
 
             sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
             sudo -u ec2-user -i chmod +x /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh
-            sudo -u ec2-user -i ./home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i bash /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
             sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
 
   # EC2 Instance for Streamlit Application with User Data (in Public Subnet 1B)
@@ -316,7 +316,7 @@ Resources:
 
             sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
             sudo -u ec2-user -i chmod +x /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh
-            sudo -u ec2-user -i ./home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i bash /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
             sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
 
   # IAM Role for Streamlit Application          
