@@ -17,7 +17,7 @@ unstructured
 pdf2image
 pytesseract
 boto3
-anthropic
+anthropic==0.38.0
 unstructured_pytesseract
 python-docx
 ai21
