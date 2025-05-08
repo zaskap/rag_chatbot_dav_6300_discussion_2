@@ -34,6 +34,8 @@ aws_region_name=$(curl -s http://169.254.169.254/latest/meta-data/placement/regi
 export AWS_DEFAULT_REGION=${aws_region_name}
 streamlit run src/home.py`
 
+Instead you can use `start_program.sh` as a single bash file to launch 
+
 3. Select the Large Language Model (LLM)
 4. Select the Source Document Input
 5. Q&A Tab is the defautl Tab (interface) - Start asking question related to the source document selected in 4th Step. 
@@ -78,5 +80,10 @@ streamlit run src/home.py`
 ## Configuration File
 
 * `config.ini` - Contains logo, images and greeting message for the look and feel of the Streamlit application. 
+
+## Setup Files
+
+* `ALB_Setup_for_Chatbot.yml`: Cloudformation YAML Template for Streamlit Deployment in Public Subnet
+* `ALB_Setup_for_Chatbot_Private_Gateway.yml`: Cloudformation YAML Template for Streamlit Deployment in Private Subnet with NAT Gateway
 
 
