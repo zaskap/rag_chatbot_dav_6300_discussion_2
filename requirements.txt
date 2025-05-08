@@ -37,6 +37,6 @@ amazon-textract-caller
 amazon-textract-textractor
 python-pptx
 youtube-transcript-api
-langchain-aws4
+langchain-aws
 
 
