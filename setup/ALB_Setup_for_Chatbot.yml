@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "CloudFormation template to create a VPC, subnets, security groups, and an Application Load Balancer (ALB) for a Streamlit application."
+Description: "CloudFormation template to create a VPC, subnets, security groups, and an Application Load Balancer (ALB) for a Streamlit application with EC2 instances in public subnets. The template also includes IAM roles and policies for the EC2 instances to access AWS services. The aplication used AWS Bedrock and Textract services."
+
 
 Parameters:
   LatestAmiId:

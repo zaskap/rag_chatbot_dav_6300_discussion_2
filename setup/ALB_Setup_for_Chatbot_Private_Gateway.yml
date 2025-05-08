@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "CloudFormation template to create a VPC, subnets, security groups, and an Application Load Balancer (ALB) for a Streamlit application."
+Description: "CloudFormation template to create a VPC with public and private subnets, an Application Load Balancer (ALB), and EC2 instances for a Streamlit application. The application used AWS Bedrock and Textract services."
 
 Parameters:
   LatestAmiId:
@@ -182,7 +182,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 90.90.0.0/16 # Allow SSH access from anywhere (for testing purposes, restrict in production)
+          CidrIp: 90.90.0.0/16 # Allow SSH access from within the VPC
 
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
