@@ -16,20 +16,22 @@ region_name='<AWS_Region>'
 
 
 application_metadata = {
-    'models-llm':[
+     'models-llm':[
         {'name': 'Nova-Pro','endpoint':"us.amazon.nova-pro-v1:0"},
+        {'name':'Claude2', 'endpoint':"anthropic.claude-v2"},
         {'name': 'claude3.5-sonnetV2','endpoint':"us.anthropic.claude-3-5-sonnet-20241022-v2:0"},
         {'name':'claude3-sonnet', 'endpoint':"anthropic.claude-3-sonnet-20240229-v1:0"},
         {'name': 'claude3.5-sonnet','endpoint':"anthropic.claude-3-5-sonnet-20240620-v1:0"},
         {'name': 'deepseek-R1','endpoint':"us.deepseek.r1-v1:0"},
         {'name':'AI21-J2-mid', 'endpoint':'ai21.j2-mid'},
         {'name':'AI21-J2-ultra', 'endpoint':'ai21.j2-ultra-v1'},
-        {'name':'Cohere Command', 'endpoint':"cohere.command-text-v14"},
+        {'name':'Claude Instant', 'endpoint':"anthropic.claude-instant-v1"},
+        {'name':'Command', 'endpoint':"cohere.command-text-v14"},
         {'name':'Titan', 'endpoint':"amazon.titan-text-express-v1"},
-        {'name':'Llama3-8b-instruct', 'endpoint':"meta.llama3-8b-instruct-v1:0"},
+        {'name':'Llama2-70b', 'endpoint':"meta.llama2-70b-chat-v1"},
         {'name':'Llama2-13b', 'endpoint':"meta.llama2-13b-chat-v1"},
-        {'name':'mistral-7b', 'endpoint':"mistral.mistral-7b-instruct-v0:2"},
-        {'name':'mixtral-8x7b-instruct', 'endpoint':"mistral.mixtral-8x7b-instruct-v0:1"}
+        {'name':'mistral-7b', 'endpoint':"mistral.mixtral-8x7b-instruct-v0:1"},
+        {'name':'mixtral-8x7b', 'endpoint':"mistral.mixtral-8x7b-instruct-v0:1"}
        ],
     'models-emb':[
         {'name':'Titan', 'endpoint':'amazon.titan-embed-text-v1'},
