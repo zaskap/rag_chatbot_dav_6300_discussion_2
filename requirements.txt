@@ -17,7 +17,7 @@ unstructured
 pdf2image
 pytesseract
 boto3
-anthropic
+anthropic==0.38.0
 unstructured_pytesseract
 python-docx
 ai21
@@ -38,5 +38,4 @@ amazon-textract-textractor
 python-pptx
 youtube-transcript-api
 langchain-aws
-
-
+httpx==0.27.2
