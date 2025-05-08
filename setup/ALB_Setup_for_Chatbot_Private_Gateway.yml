@@ -1,0 +1,476 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation template to create a VPC, subnets, security groups, and an Application Load Balancer (ALB) for a Streamlit application."
+
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+    Description: "Latest Amazon Linux 2023 AMI ID"
+
+  EC2RoleName:
+    Description: Provide the Role Name used for this App Server
+    Type: String
+    Default: 'StreamlitAppRole'
+
+Resources:
+  # VPC
+  dav6300Discussion2VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "90.90.0.0/16"
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-VPC"
+
+  # Public Subnet 1A
+  dav6300Discussion2PublicSubnet1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.10.0/24"
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-subnet-1A"
+
+  # Private Subnet 1A
+  dav6300Discussion2PrivateSubnet1A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.11.0/24"
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-subnet-1A"
+
+  # Public Subnet 1B
+  dav6300Discussion2PublicSubnet1B:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.20.0/24"
+      AvailabilityZone: "us-east-1b"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-subnet-1B"
+
+  # Private Subnet 1B
+  dav6300Discussion2PrivateSubnet1B:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      CidrBlock: "90.90.21.0/24"
+      AvailabilityZone: "us-east-1b"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-subnet-1B"
+
+  # Internet Gateway
+  dav6300Discussion2IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-IGW"
+
+  # Attach Internet Gateway to VPC
+  AttachIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      InternetGatewayId: !Ref dav6300Discussion2IGW
+
+  # Public Route Table
+  dav6300Discussion2PublicRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-public-RT"
+
+  # Public Route
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachIGW
+    Properties:
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref dav6300Discussion2IGW
+
+  # Associate Public Subnet 1A with Public Route Table
+  AssociatePublicSubnet1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PublicSubnet1A
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+
+  # Associate Public Subnet 1B with Public Route Table
+  AssociatePublicSubnet1B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PublicSubnet1B
+      RouteTableId: !Ref dav6300Discussion2PublicRT
+
+  # Private Route Table
+  dav6300Discussion2PrivateRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref dav6300Discussion2VPC
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-private-RT"
+
+  # NAT Gateway
+  NATGateway1A:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EipNATGateway1A.AllocationId
+      SubnetId: !Ref dav6300Discussion2PublicSubnet1A
+      Tags:
+        - Key: Name
+          Value: "dav_6300_discussion_2-nat-gateway-1A"
+
+  # Elastic IP for NAT Gateway
+  EipNATGateway1A:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  # Private Route for NAT Gateway
+  PrivateRouteNATGateway:
+    Type: AWS::EC2::Route
+    DependsOn: NATGateway1A
+    Properties:
+      RouteTableId: !Ref dav6300Discussion2PrivateRT
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NATGateway1A
+
+  # Associate Private Subnet 1A with Private Route Table
+  AssociatePrivateSubnet1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PrivateSubnet1A
+      RouteTableId: !Ref dav6300Discussion2PrivateRT
+
+  # Associate Private Subnet 1B with Private Route Table
+  AssociatePrivateSubnet1B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref dav6300Discussion2PrivateSubnet1B
+      RouteTableId: !Ref dav6300Discussion2PrivateRT
+
+  # Security Group for Streamlit Application Instances
+  StreamlitAppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Enable SSH access from within the VPC and Streamlit access from the ALB"
+      VpcId: !Ref dav6300Discussion2VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          SourceSecurityGroupId: !Ref ALBSecurityGroup # Allow Streamlit traffic from the ALB
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 90.90.0.0/16 # Allow SSH access from anywhere (for testing purposes, restrict in production)
+
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: "-1"  # Allow all outbound traffic
+
+  # Security Group for the Application Load Balancer
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow traffic to the ALB"
+      VpcId: !Ref dav6300Discussion2VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8501 
+          ToPort: 8501   
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: 90.90.0.0/16  # Allow traffic to the Streamlit instances
+
+  # EC2 Instance for Streamlit Application with User Data (in Public Subnet 1A)
+  StreamlitAppServer1A:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.medium
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: '30'
+      IamInstanceProfile: !Ref StreamlitAppServerProfile
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          GroupSet: [!GetAtt StreamlitAppSecurityGroup.GroupId]
+          SubnetId: !Ref dav6300Discussion2PrivateSubnet1A # Place in Public Subnet 1A
+      ImageId: !Ref LatestAmiId
+      Tags:
+        - Key: 'Name'
+          Value: 'StreamlitApp_Server_1A'
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            # Variables
+            yum update -y
+            yum install -y git
+            cd /home/ec2-user
+            sudo -u ec2-user -i echo "Cloning pyenv environment" >> /tmp/userData.log
+            sudo -u ec2-user -i git clone https://github.com/pyenv/pyenv.git /home/ec2-user/.pyenv
+            sudo -u ec2-user -i echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo 'eval "$(pyenv init -)"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i mkdir -p /home/ec2-user/pipInstall
+            sudo -u ec2-user -i echo 'export TMPDIR="/home/ec2-user/pipInstall"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i source /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo "pyenv environment setup Done..." >> /tmp/userData.log
+            # Install RPMs needed for install Python 3.10.x and onwards
+            sudo -u ec2-user -i echo "Installing RPMS for 3.10.x" >> /tmp/userData.log
+            yum install -y gcc zlib-devel bzip2 bzip2-devel patch readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel
+            yum install -y libglvnd-glx
+            sudo -u ec2-user -i echo "RPMS installation done..." >> /tmp/userData.log
+            sudo -u ec2-user -i echo "Installing python 3.10" >> /tmp/userData.log
+            sudo -u ec2-user -i pyenv install 3.10
+            sudo -u ec2-user -i echo "python 3.10.x installation completed..." >> /tmp/userData.log
+            sudo -u ec2-user -i git clone https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2.git
+            cd /home/ec2-user/rag_chatbot_dav_6300_discussion_2
+            sudo -u ec2-user -i pyenv global 3.10.17
+            sudo -u ec2-user -i echo "Installing application related libraries..." >> /tmp/userData.log
+            sudo -u ec2-user -i pip install -r /home/ec2-user/rag_chatbot_dav_6300_discussion_2/requirements.txt --no-cache-dir
+            
+            sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
+
+            sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
+            sudo -u ec2-user -i chmod +x /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh
+            sudo -u ec2-user -i bash /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
+
+  # EC2 Instance for Streamlit Application with User Data (in Public Subnet 1B)
+  StreamlitAppServer1B:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: '30'
+      IamInstanceProfile: !Ref StreamlitAppServerProfile
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          GroupSet: [!GetAtt StreamlitAppSecurityGroup.GroupId]
+          SubnetId: !Ref dav6300Discussion2PrivateSubnet1B # Place in Private Subnet 1B
+      ImageId: !Ref LatestAmiId
+      Tags:
+        - Key: 'Name'
+          Value: 'StreamlitApp_Server_1B'
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            # Variables
+            yum update -y
+            yum install -y git
+            cd /home/ec2-user
+            sudo -u ec2-user -i echo "Cloning pyenv environment" >> /tmp/userData.log
+            sudo -u ec2-user -i git clone https://github.com/pyenv/pyenv.git /home/ec2-user/.pyenv
+            sudo -u ec2-user -i echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo 'eval "$(pyenv init -)"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i mkdir -p /home/ec2-user/pipInstall
+            sudo -u ec2-user -i echo 'export TMPDIR="/home/ec2-user/pipInstall"' >> /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i source /home/ec2-user/.bash_profile
+            sudo -u ec2-user -i echo "pyenv environment setup Done..." >> /tmp/userData.log
+            # Install RPMs needed for install Python 3.10.x and onwards
+            sudo -u ec2-user -i echo "Installing RPMS for 3.10.x" >> /tmp/userData.log
+            yum install -y gcc zlib-devel bzip2 bzip2-devel patch readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel
+            yum install -y libglvnd-glx
+            sudo -u ec2-user -i echo "RPMS installation done..." >> /tmp/userData.log
+            sudo -u ec2-user -i echo "Installing python 3.10" >> /tmp/userData.log
+            sudo -u ec2-user -i pyenv install 3.10
+            sudo -u ec2-user -i echo "python 3.10.x installation completed..." >> /tmp/userData.log
+            sudo -u ec2-user -i git clone https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2.git
+            cd /home/ec2-user/rag_chatbot_dav_6300_discussion_2
+            sudo -u ec2-user -i pyenv global 3.10.17
+            sudo -u ec2-user -i echo "Installing application related libraries..." >> /tmp/userData.log
+            sudo -u ec2-user -i pip install -r /home/ec2-user/rag_chatbot_dav_6300_discussion_2/requirements.txt --no-cache-dir
+            
+            sudo -u ec2-user -i echo "Finished running user data...." >> /tmp/userData.log
+
+            sudo -u ec2-user -i echo "Starting the application..." >> /tmp/userData.log
+            sudo -u ec2-user -i chmod +x /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh
+            sudo -u ec2-user -i bash /home/ec2-user/rag_chatbot_dav_6300_discussion_2/start_program.sh > /tmp/userData.log 2>&1 &
+            sudo -u ec2-user -i echo "Application started..." >> /tmp/userData.log
+
+  # IAM Role for Streamlit Application          
+  StreamlitAppServerRole: 
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      RoleName: !Ref  'EC2RoleName'
+      Description: Role to access services for Streamlit Application
+
+  # Attach Managed Policy to Role
+  StreamlitAppServerProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: !Join
+                            - '-'
+                            - - 'StreamlitAppProfile'
+                              - !Ref 'AWS::StackName'
+      Roles:
+        - !Ref StreamlitAppServerRole
+  
+  # S3 Bucket for Streamlit Application
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: Yes
+        BlockPublicPolicy: Yes
+        IgnorePublicAcls: Yes
+        RestrictPublicBuckets: Yes
+
+  # Managed Policy for Streamlit App Server
+  StreamlitAppManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    DependsOn:  StreamlitAppServerRole
+    Properties: 
+      Description: Managed Policy to access services for Streamlit Application
+      ManagedPolicyName: 'StreamlitAppAccess'
+      Path: /
+      PolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - 's3:PutObject'
+          - 's3:GetObject'
+          - 'bedrock:InvokeModel'
+          - 'bedrock:InvokeModelWithResponseStream'
+          - 'textract:DetectDocumentText'
+          - 'transcribe:GetTranscriptionJob'
+          - 'transcribe:StartTranscriptionJob'
+          - 'transcribe:ListTranscriptionJobs'
+          - 'cloudformation:DescribeStacks'
+          Resource: "*" 
+      Roles: 
+        - "StreamlitAppRole"
+
+  
+  # IAM Policy for EC2 Instance Connect
+  EC2ConnectCustomerManagedPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    DependsOn: 
+      - StreamlitAppServerRole
+    Properties:
+      ManagedPolicyName: Ec2CustomerManagedPolicy
+      Description: Customer managed policy for read-only access to EC2 instances
+      Path: '/'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: ec2-instance-connect:SendSSHPublicKey
+            Resource:
+              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/${StreamlitAppServer1A}
+              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/${StreamlitAppServer1B}
+          - Effect: Allow
+            Action: ec2:DescribeInstances
+            Resource: "*"
+      Roles:
+        - StreamlitAppRole
+
+
+  # Application Load Balancer
+  StreamlitALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+        - !Ref dav6300Discussion2PublicSubnet1A
+        - !Ref dav6300Discussion2PublicSubnet1B
+      SecurityGroups:
+        - !GetAtt ALBSecurityGroup.GroupId
+      Tags:
+        - Key: Name
+          Value: "Streamlit-ALB"
+
+  # ALB Target Group
+  StreamlitTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 200,302
+      Name: StreamlitWebServers
+      Port: 8501
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref dav6300Discussion2VPC
+  
+  StreamlitListener:
+    Type : AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref StreamlitTargetGroup
+      LoadBalancerArn: !Ref StreamlitALB
+      Port: 8501
+      Protocol: HTTP
+
+Outputs:
+  ApplicationLoadBalancerDNSName:
+    Description: "The DNS name of the Application Load Balancer"
+    Value: !GetAtt StreamlitALB.DNSName
+  StreamlitAppInstance1AId:
+    Description: InstanceId of the newly created StreamlitApp instance in Subnet 1A
+    Value: !Ref 'StreamlitAppServer1A'
+  StreamlitAppInstance1BId:
+    Description: InstanceId of the newly created StreamlitApp instance in Subnet 1B
+    Value: !Ref 'StreamlitAppServer1B'
+  BucketName:
+    Description: S3 Bucket to hold the artifacts
+    Value: !Ref S3Bucket
+  StreamlitTargetGroup:
+    Description: Webserver target group
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitTargetGroup
+    Value: !Ref StreamlitTargetGroup
+  StreamlitALBDnsName:
+    Description: Application Load Balancer DNS Name
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitALBDnsName
+    Value: !GetAtt StreamlitALB.DNSName
+  StreamlitALBZoneID:
+    Description: Application Load Balancer Canonical Hosted Zone ID
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitALBZoneID
+    Value: !GetAtt StreamlitALB.CanonicalHostedZoneID

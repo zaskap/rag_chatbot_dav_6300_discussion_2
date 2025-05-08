@@ -130,14 +130,14 @@ def select_models(page):
 # this function is called from the main.py file
 def first_column():
             st.markdown("<p style='text-align:center; color:blue;'><u><b>About Me</b></u></p>",unsafe_allow_html=True)
-            st.markdown("<p style='color:#5A5A5A;'>🤝 I am a QnA agent, based on RAG (Retrieval Augmented Generation Architecture) that answers questions by reading assets (like documents, Power point slides, videos & audios) provided by you.</p>",unsafe_allow_html=True)
+            st.markdown("<p style='color:#FFFFFF;'>🤝 I am a QnA agent, based on RAG (Retrieval Augmented Generation Architecture) that answers questions by reading assets (like documents, Power point slides, videos & audios) provided by you.</p>",unsafe_allow_html=True)
             st.write(" ")
             st.write(" ")
             st.write(" ")            
-            st.markdown("<span style='color:#5A5A5A;'>🤝 I am built on [Streamlit](https://streamlit.io/) using [Amazon Bedrock](https://aws.amazon.com/bedrock/) powered large language models and a diverse set of document loaders developed by [LangChain](https://python.langchain.com/en/latest/index.html). Also [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss/) is used as in-memory Vector store.</span>", unsafe_allow_html=True)
+            st.markdown("<span style='color:#FFFFFF;'>🤝 I am built on [Streamlit](https://streamlit.io/) using [Amazon Bedrock](https://aws.amazon.com/bedrock/) powered large language models and a diverse set of document loaders developed by [LangChain](https://python.langchain.com/en/latest/index.html). Also [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss/) is used as in-memory Vector store.</span>", unsafe_allow_html=True)
             st.write(" ")
             st.write(" ")
-            st.markdown("<p style='color:#5A5A5A;'>🤝 Wide ranges of input choices available viz. Documents(.pdf and .txt), web ulrs(single page), YouTube links, Audio files and text from Images and Power Points are enabled. Websites with embedded links and Heavy Spreadsheets are in the upcoming versions.</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color:#FFFFFF;'>🤝 Wide ranges of input choices available viz. Documents(.pdf and .txt), web ulrs(single page), YouTube links, Audio files and text from Images and Power Points are enabled. Websites with embedded links and Heavy Spreadsheets are in the upcoming versions.</p>", unsafe_allow_html=True)
             st.write(" ")        
             st.write(" ")
 
@@ -148,7 +148,7 @@ def second_column():
             st.write(" ")
             st.write(" ")
             st.write(" ")
-            st.markdown("<span style='color:#5A5A5A;'>👉🏽 You can then choose the asset you want to chat on. From the radio buttons on the sidebar. Presently you can select 📜 documents or 🔗 links to webpages, videos, images basis your choice.",unsafe_allow_html=True)
+            st.markdown("<span style='color:#FFFFFF;'>👉🏽 You can then choose the asset you want to chat on. From the radio buttons on the sidebar. Presently you can select 📜 documents or 🔗 links to webpages, videos, images basis your choice.",unsafe_allow_html=True)
             st.write(" ")
             st.write(" ")
 
@@ -157,7 +157,7 @@ def second_column():
 def third_column():
             st.write(" ")
             st.write(" ")
-            st.markdown("""<span style='color:#5A5A5A;'>The Reference for this project are as follows <br>
+            st.markdown("""<span style='color:#FFFFFF;'>The Reference for this project are as follows <br>
             <ul>
                 <li><a href="https://aws.amazon.com/blogs/machine-learning/build-a-conversational-chatbot-using-different-llms-within-single-interface-part-1/">Build a conversational chatbot using different LLMs within single interface – Part 1</a> </li>
                 <li><a href="https://medium.com/@e-miguel/deploy-a-dynamic-website-on-aws-with-cloudformation-235e1e6a84a7">Deploy a Dynamic Website on AWS with CloudFormation</a> </li>
@@ -167,7 +167,7 @@ def third_column():
             </span>""",unsafe_allow_html=True)
             st.write(" ")
             st.write(" ")
-            st.markdown("""<span style='color:#5A5A5A;'> The Code for this project can be found here - <a href="https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2"> Project Github Repo </a></span>""",unsafe_allow_html=True)
+            st.markdown("""<span style='color:#FFFFFF;'> The Code for this project can be found here - <a href="https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2"> Project Github Repo </a></span>""",unsafe_allow_html=True)
             st.write(" ")
             st.write(" ")
             
