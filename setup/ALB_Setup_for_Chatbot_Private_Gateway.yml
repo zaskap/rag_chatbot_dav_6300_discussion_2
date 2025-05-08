@@ -590,8 +590,6 @@ Outputs:
   S3Bucket:
     Description: S3 Bucket for Streamlit App
     Value: !Ref S3Bucket
-    Export:
-      Name: !Sub ${AWS::StackName}-S3Bucket
 
   StreamlitAppManagedPolicy:
     Description: IAM Managed Policy for Streamlit App
