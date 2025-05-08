@@ -476,30 +476,140 @@ Resources:
       Protocol: HTTP
 
 Outputs:
-  ApplicationLoadBalancerDNSName:
-    Description: "The DNS name of the Application Load Balancer"
-    Value: !GetAtt StreamlitALB.DNSName
-  StreamlitAppInstance1AId:
-    Description: InstanceId of the newly created StreamlitApp instance in Subnet 1A
-    Value: !Ref 'StreamlitAppServer1A'
-  StreamlitAppInstance1BId:
-    Description: InstanceId of the newly created StreamlitApp instance in Subnet 1B
-    Value: !Ref 'StreamlitAppServer1B'
-  BucketName:
-    Description: S3 Bucket to hold the artifacts
-    Value: !Ref S3Bucket
-  StreamlitTargetGroup:
-    Description: Webserver target group
+  dav6300Discussion2VPC:
+    Description: VPC ID
+    Value: !Ref dav6300Discussion2VPC
     Export:
-      Name: !Sub ${AWS::StackName}-StreamlitTargetGroup
-    Value: !Ref StreamlitTargetGroup
+      Name: !Sub ${AWS::StackName}-dav6300Discussion2VPC
+  
+  dav6300Discussion2PublicSubnet1A:
+    Description: Subnet 1 ID
+    Value: !Ref dav6300Discussion2PublicSubnet1A
+    Export:
+      Name: !Sub ${AWS::StackName}-dav6300Discussion2PublicSubnet1A
+  
+  dav6300Discussion2PublicSubnet1B:
+    Description: Subnet 2 ID
+    Value: !Ref dav6300Discussion2PublicSubnet1B
+    Export:
+      Name: !Sub ${AWS::StackName}-dav6300Discussion2PublicSubnet1B
+
+  dav6300Discussion2IGW:
+    Description: Internet Gateway ID
+    Value: !Ref dav6300Discussion2IGW
+    Export:
+      Name: !Sub ${AWS::StackName}-dav6300Discussion2IGW
+  
+  AttachIGW:
+    Description: Attach Internet Gateway to VPC
+    Value: !Ref AttachIGW
+    Export:
+      Name: !Sub ${AWS::StackName}-AttachIGW
+  
+  dav6300Discussion2PublicRT:
+    Description: Public Route Table ID
+    Value: !Ref dav6300Discussion2PublicRT
+    Export:
+      Name: !Sub ${AWS::StackName}-dav6300Discussion2PublicRT
+  
+  PublicRoute:
+    Description: Public Route ID
+    Value: !Ref PublicRoute
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicRoute
+  
+  AssociatePublicSubnet1A:
+    Description: Associate Public Subnet 1A with Route Table
+    Value: !Ref AssociatePublicSubnet1A
+    Export:
+      Name: !Sub ${AWS::StackName}-AssociatePublicSubnet1A
+
+  AssociatePublicSubnet1B:
+    Description: Associate Public Subnet 1B with Route Table
+    Value: !Ref AssociatePublicSubnet1B
+    Export:
+      Name: !Sub ${AWS::StackName}-AssociatePublicSubnet1B
+
+  StreamlitAppSecurityGroup:
+    Description: Security Group for Streamlit App
+    Value: !Ref StreamlitAppSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppSecurityGroup
+  
+  ALBSecurityGroup:
+    Description: Security Group for ALB
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-ALBSecurityGroup
+  
+  StreamlitAppServer1A:
+    Description: Streamlit App Server 1A ID
+    Value: !Ref StreamlitAppServer1A
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppServer1A
+
+  StreamlitAppServer1B:
+    Description: Streamlit App Server 1B ID
+    Value: !Ref StreamlitAppServer1B
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppServer1B
+
+  StreamlitAppServerRole:
+    Description: IAM Role for Streamlit App Server
+    Value: !Ref StreamlitAppServerRole
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppServerRole
+  
+  StreamlitAppServerProfile:
+    Description: IAM Instance Profile for Streamlit App Server
+    Value: !Ref StreamlitAppServerProfile
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppServerProfile
+  
+  S3Bucket:
+    Description: S3 Bucket for Streamlit App
+    Value: !Ref S3Bucket
+    Export:
+      Name: !Sub ${AWS::StackName}-S3Bucket
+
+  StreamlitAppManagedPolicy:
+    Description: IAM Managed Policy for Streamlit App
+    Value: !Ref StreamlitAppManagedPolicy
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitAppManagedPolicy
+
+  EC2ConnectCustomerManagedPolicy:
+    Description: EC2 Connect Customer Managed Policy
+    Value: !Ref EC2ConnectCustomerManagedPolicy
+    Export:
+      Name: !Sub ${AWS::StackName}-EC2ConnectCustomerManagedPolicy
+
   StreamlitALBDnsName:
     Description: Application Load Balancer DNS Name
+    Value: !GetAtt StreamlitALB.DNSName
     Export:
       Name: !Sub ${AWS::StackName}-StreamlitALBDnsName
-    Value: !GetAtt StreamlitALB.DNSName
+
   StreamlitALBZoneID:
     Description: Application Load Balancer Canonical Hosted Zone ID
+    Value: !GetAtt StreamlitALB.CanonicalHostedZoneID
     Export:
       Name: !Sub ${AWS::StackName}-StreamlitALBZoneID
-    Value: !GetAtt StreamlitALB.CanonicalHostedZoneID
+  
+  StreamlitALB:
+    Description: ALB for Streamlit App
+    Value: !Ref StreamlitALB
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitALB
+  
+  StreamlitTargetGroup:
+    Description: Target Group for Streamlit App
+    Value: !Ref StreamlitTargetGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitTargetGroup
+  
+  StreamlitListener:
+    Description: ALB Listener for Streamlit App
+    Value: !Ref StreamlitListener
+    Export:
+      Name: !Sub ${AWS::StackName}-StreamlitListener
