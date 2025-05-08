@@ -587,7 +587,7 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-StreamlitAppServerProfile
   
-  S3Bucket:
+  BucketName:
     Description: S3 Bucket for Streamlit App
     Value: !Ref S3Bucket
 
