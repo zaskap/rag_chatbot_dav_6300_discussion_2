@@ -253,6 +253,7 @@ Resources:
             sudo -u ec2-user -i git clone https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2.git
             cd /home/ec2-user/rag_chatbot_dav_6300_discussion_2
             sudo -u ec2-user -i pyenv global 3.10.17
+            sudo -u ec2-user -i pip install --upgrade pip 
             sudo -u ec2-user -i echo "Installing application related libraries..." >> /tmp/userData.log
             sudo -u ec2-user -i pip install -r /home/ec2-user/rag_chatbot_dav_6300_discussion_2/requirements.txt --no-cache-dir
             
@@ -310,6 +311,7 @@ Resources:
             sudo -u ec2-user -i git clone https://github.com/zaskap/rag_chatbot_dav_6300_discussion_2.git
             cd /home/ec2-user/rag_chatbot_dav_6300_discussion_2
             sudo -u ec2-user -i pyenv global 3.10.17
+            sudo -u ec2-user -i pip install --upgrade pip 
             sudo -u ec2-user -i echo "Installing application related libraries..." >> /tmp/userData.log
             sudo -u ec2-user -i pip install -r /home/ec2-user/rag_chatbot_dav_6300_discussion_2/requirements.txt --no-cache-dir
             
