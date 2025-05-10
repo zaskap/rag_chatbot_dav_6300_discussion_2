@@ -86,4 +86,12 @@ Instead you can use `start_program.sh` as a single bash file to launch
 * `ALB_Setup_for_Chatbot.yml`: Cloudformation YAML Template for Streamlit Deployment in Public Subnet
 * `ALB_Setup_for_Chatbot_Private_Gateway.yml`: Cloudformation YAML Template for Streamlit Deployment in Private Subnet with NAT Gateway
 
+## References
+
+* [Build a conversational chatbot using different LLMs within single interface – Part 1](https://aws.amazon.com/blogs/machine-learning/build-a-conversational-chatbot-using-different-llms-within-single-interface-part-1/)
+* [Deploy a Dynamic Website on AWS with CloudFormation](https://medium.com/@e-miguel/deploy-a-dynamic-website-on-aws-with-cloudformation-235e1e6a84a7)
+* [Building a Secure and Scalable Django Blog on AWS: The Ultimate Guide](https://alledevops.com/building-a-secure-and-scalable-django-blog-on-aws-the-ultimate-guide)
+* [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
+* [Anatomy of efficient CloudFormation templates for large-scale automated testing, AIOps, MLOps, etc.](https://repost.aws/articles/ARG3rzAmDCQzmxkMKLOGiUnA/anatomy-of-efficient-cloudformation-templates-for-large-scale-automated-testing-aiops-mlops-etc)
+* [AWS CloudFormation template explained](https://www.techielass.com/aws-cloudformation-template-explained/)
 
